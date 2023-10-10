@@ -1,12 +1,4 @@
-{\rtf1\ansi\ansicpg1252\cocoartf2639
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 .AppleSystemUIFontMonospaced-Regular;\f2\fnil\fcharset0 LucidaGrande;
-}
-{\colortbl;\red255\green255\blue255;\red224\green232\blue240;}
-{\*\expandedcolortbl;;\cssrgb\c90196\c92941\c95294;}
-\margl1440\margr1440\vieww17640\viewh12620\viewkind0
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
-
-\f0\fs24 \cf0 # Building and Running the Application\
+# Building and Running the Application\
 \
 This document provides instructions on how to build and run the application. Please follow the steps below:\
 \
@@ -23,13 +15,8 @@ Before proceeding, ensure that you have the following software installed on your
 2. Change to the directory where you want to clone the repository.\
 3. Run the following command to clone the repository:\
 \
-```\
-git clone 
-\f1\fs28 \cf2 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec2 https://github.com/heglinjon/KeepSafe.git\
+git clone https://github.com/heglinjon/KeepSafe.git\
 
-\f0\fs24 \cf0 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
-```\
 \
 ## Build and Run the Application\
 \
