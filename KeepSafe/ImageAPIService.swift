@@ -19,3 +19,22 @@ class ImageAPIServiceImpl: ImageAPIService {
         return imageURLs
     }
 }
+
+enum mockFetchImagesError : Error {
+    case ConnectionError
+    case timeOut
+}
+
+
+class MockImageAPIService: ImageAPIService {
+    var mockFetchImagesResult: [URL] = []
+    var mockFetchImagesError: Error?
+    
+    func fetchImages(page: Int, limit: Int) async throws -> [URL] {
+        if let error = mockFetchImagesError {
+            throw error
+        } else {
+            return mockFetchImagesResult
+        }
+    }
+}

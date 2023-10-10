@@ -5,6 +5,20 @@ protocol PersistenceService {
     func read(service: String, account: String) -> Data?
 }
 
+class MockPersistenceService: PersistenceService {
+    var savedData: Data?
+    var mockReadResult: Data?
+    
+    func save(data: Data, service: String, account: String) -> Bool {
+        savedData = data
+        return true
+    }
+    
+    func read(service: String, account: String) -> Data? {
+        return mockReadResult
+    }
+}
+
 class KeychainPersistenceService: PersistenceService {
     func save(data: Data, service: String, account: String) -> Bool {
         let query = [
@@ -40,7 +54,7 @@ class PinViewModel: ObservableObject {
     @Published var firstRun: Bool = true
     @Published var blurRadius: CGFloat = 0
     
-    private let storage: PersistenceService = KeychainPersistenceService()
+    var storage: PersistenceService = KeychainPersistenceService()
     
     func checkPIN() -> Bool {
         let ps = String(data: storage.read(service: "passcode", account: "user")!, encoding: .utf8) ?? ""

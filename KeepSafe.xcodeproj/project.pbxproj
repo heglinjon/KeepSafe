@@ -19,6 +19,7 @@
 		7E114FF82AD1F53500991DED /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E114FF72AD1F53500991DED /* MainViewModel.swift */; };
 		7E8B20412AD3588100232F33 /* PinScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8B20402AD3588100232F33 /* PinScreenView.swift */; };
 		7EA3DBCE2AD333DD00BD1FA1 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 7EA3DBCD2AD333DD00BD1FA1 /* Kingfisher */; };
+		7ED1729B2AD6003800BCA37C /* PINViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED1729A2AD6003800BCA37C /* PINViewModelTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		7E114FF72AD1F53500991DED /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		7E8B20402AD3588100232F33 /* PinScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinScreenView.swift; sourceTree = "<group>"; };
 		7EA3DBCB2AD2036F00BD1FA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		7ED1729A2AD6003800BCA37C /* PINViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINViewModelTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				7E114FDA2AD1F36400991DED /* KeepSafeTests.swift */,
+				7ED1729A2AD6003800BCA37C /* PINViewModelTest.swift */,
 			);
 			path = KeepSafeTests;
 			sourceTree = "<group>";
@@ -292,6 +295,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7ED1729B2AD6003800BCA37C /* PINViewModelTest.swift in Sources */,
 				7E114FDB2AD1F36400991DED /* KeepSafeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
