@@ -34,67 +34,15 @@ class KeychainPersistenceService: PersistenceService {
     }
 }
 
-struct PinScreenView: View {
-    @EnvironmentObject private var appRootManager: AppRootManager
+class PinViewModel: ObservableObject {
+    @Published var enteredPIN: String = ""
+    @Published var isPINCorrect: Bool = false
+    @Published var firstRun: Bool = true
+    @Published var blurRadius: CGFloat = 0
     
-    @State private var enteredPIN: String = ""
-    @State private var isPINCorrect: Bool = false
-    let apiService: ImageAPIService = ImageAPIServiceImpl()
-    @State private var firstRun: Bool = true
-    @Environment(\.scenePhase) var scenePhase
-    @State var blurRadius: CGFloat = 0
+    private let storage: PersistenceService = KeychainPersistenceService()
     
-    let storage: PersistenceService = KeychainPersistenceService()
-    
-    var body: some View {
-        VStack {
-            Text("Enter PIN to access the app")
-                .font(.headline)
-                .padding()
-            
-            SecureField("PIN", text: $enteredPIN)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-                .keyboardType(.numberPad)
-            
-            Button("Submit") {
-                if checkPIN() {
-                    DispatchQueue.main.asyncAfter(deadline: .now()) {
-                        withAnimation(.spring()) {
-                            appRootManager.currentRoot = .images
-                        }
-                    }
-                }
-            }
-            .padding()
-            .disabled(enteredPIN.isEmpty)
-            
-            Text("Incorrect PIN. Please try again.")
-                .foregroundColor(.red)
-                .padding()
-                .opacity(firstRun ? 0 : 1)
-            
-        }
-        .onAppear {
-            setPIN()
-            resetPIN()
-        }
-        .blur(radius: blurRadius)
-        .onChange(of: scenePhase) { newPhase in
-            switch newPhase {
-            case .active: withAnimation { blurRadius = 0 }
-            case .inactive: withAnimation { blurRadius = 15 }
-            case .background:
-                blurRadius = 20
-            @unknown default: print("Unknown")
-            }
-        }
-        .onAppear {
-            isPINCorrect = false
-        }
-    }
-    
-    private func checkPIN() -> Bool {
+    func checkPIN() -> Bool {
         let ps = String(data: storage.read(service: "passcode", account: "user")!, encoding: .utf8) ?? ""
         if enteredPIN == ps {
             // PIN is correct
@@ -109,15 +57,71 @@ struct PinScreenView: View {
         }
     }
     
-    private func resetPIN() {
+    func resetPIN() {
         enteredPIN = ""
     }
     
-    private func setPIN() {
-        
+    func setPIN() {
         let st = storage.save(data: "1234".data(using: .utf8)!, service: "passcode", account: "user")
         if !st {
-            print("Key lready exists or smth happened")
+            print("Key Already exists or something happened")
+        }
+    }
+}
+
+struct PinScreenView: View {
+    @EnvironmentObject private var appRootManager: AppRootManager
+    @ObservedObject private var pinViewModel: PinViewModel
+    @Environment(\.scenePhase) var scenePhase
+
+    init(pinViewModel: PinViewModel) {
+        self.pinViewModel = pinViewModel
+    }
+    
+    var body: some View {
+        VStack {
+            Text("Enter PIN to access the app")
+                .font(.headline)
+                .padding()
+            
+            SecureField("PIN", text: $pinViewModel.enteredPIN)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+                .keyboardType(.numberPad)
+            
+            Button("Submit") {
+                if pinViewModel.checkPIN() {
+                    DispatchQueue.main.asyncAfter(deadline: .now()) {
+                        withAnimation(.spring()) {
+                            appRootManager.currentRoot = .images
+                        }
+                    }
+                }
+            }
+            .padding()
+            .disabled(pinViewModel.enteredPIN.isEmpty)
+            
+            Text("Incorrect PIN. Please try again.")
+                .foregroundColor(.red)
+                .padding()
+                .opacity(pinViewModel.firstRun ? 0 : 1)
+        }
+        .onAppear {
+            pinViewModel.setPIN()
+            pinViewModel.resetPIN()
+        }
+        .blur(radius: pinViewModel.blurRadius)
+        .onChange(of: scenePhase) { newPhase in
+            switch newPhase {
+            case .active: withAnimation { pinViewModel.blurRadius = 0 }
+            case .inactive: withAnimation { pinViewModel.blurRadius = 15 }
+            case .background:
+                pinViewModel.blurRadius = 20
+            @unknown default: print("Unknown")
+            }
+        }
+        .onAppear {
+            pinViewModel.isPINCorrect = false
         }
     }
 }

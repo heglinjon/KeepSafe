@@ -18,13 +18,17 @@ struct KeepSafeApp: App {
 
     @StateObject private var appRootManager = AppRootManager()
     let apiService: ImageAPIService = ImageAPIServiceImpl()
-
+    let PinService = PinViewModel()
+    
+    
     var body: some Scene {
         WindowGroup {
             Group {
                 switch appRootManager.currentRoot {
                 case .home:
-                    PinScreenView()
+                    PinScreenView(pinViewModel: PinService)
+                    
+                    
                 case .images:
                     ContentView(viewModel: MainViewModel(apiService: apiService))
                 }

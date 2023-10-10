@@ -21,7 +21,7 @@ class MainViewModel: ObservableObject {
         }
     }
     
-     func fetchImages() async throws {
+    func fetchImages() async throws {
         let imageURLs = try await apiService.fetchImages(page: currentPage, limit: limit)
         
         DispatchQueue.main.async {
@@ -41,6 +41,12 @@ class MainViewModel: ObservableObject {
             }
         }
     }
+}
+
+
+///This Extension is related to the FullScreenView Methods, It's methods maybe need to be extended
+///Loose Coupling purpose
+extension MainViewModel {
     
     func swipeLeft() {
         if currentIndex < images.count - 1 {
