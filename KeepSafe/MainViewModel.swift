@@ -24,7 +24,7 @@ class MainViewModel: ObservableObject {
     func fetchImages() async throws {
         let imageURLs = try await apiService.fetchImages(page: currentPage, limit: limit)
         
-        DispatchQueue.main.async {
+        await MainActor.run {
             self.images.append(contentsOf: imageURLs)
             self.currentPage += 1
         }

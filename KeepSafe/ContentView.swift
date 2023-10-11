@@ -13,37 +13,39 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))], spacing: 16) {
-                    ForEach(viewModel.images, id: \.self) { imageURL in
-                        NavigationLink(destination: FullScreenView(viewModel: viewModel, imageURL: imageURL)) {
-                            KFImage(imageURL)
-                                .resizable()
-                                .progressViewStyle(.linear)
-                                .scaledToFill()
-                                .frame(width: 150, height: 150)
-
-                        }
-                        .task {
-                            if imageURL == viewModel.images.last {
-                                print("End of scroll")
-                                viewModel.loadMoreImagesIfNeeded(currentItemIndex: viewModel.images.count - 1)
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 150),spacing: 10)], spacing: 16) {
+                    Section(header: Text("Images").font(.title)) {
+                        ForEach(viewModel.images, id: \.self) { imageURL in
+                            NavigationLink(destination: FullScreenView(viewModel: viewModel, imageURL: imageURL)) {
+                                KFImage(imageURL)
+                                    .placeholder{
+                                        ProgressView()
+                                            .progressViewStyle(CircularProgressViewStyle(tint: Color("ColorAccent")))
+                                    }
+                                    .resizable()
+                                    .progressViewStyle(.linear)
+                                    .scaledToFill()                                
                             }
-
+                            .task {
+                                if imageURL == viewModel.images.last {
+                                    print("End of scroll")
+                                    viewModel.loadMoreImagesIfNeeded(currentItemIndex: viewModel.images.count - 1)
+                                }
+                            }
                         }
                     }
                 }
             }
         }
+        .navigationTitle("Images")
         .blur(radius: blurRadius)
         .onChange(of: scenePhase) { newPhase in
             switch newPhase {
             case .active: withAnimation {
                 blurRadius = 0
-                DispatchQueue.main.asyncAfter(deadline: .now()) {
                     withAnimation(.spring()) {
                         appRootManager.currentRoot = .home
                     }
-                }
             }
             case .inactive: withAnimation {
                 blurRadius = 15
@@ -90,11 +92,9 @@ struct FullScreenView: View {
                 switch newPhase {
                 case .active: withAnimation {
                     blurRadius = 0
-                    DispatchQueue.main.asyncAfter(deadline: .now()) {
                         withAnimation(.spring()) {
                             appRootManager.currentRoot = .home
                         }
-                    }
                 }
                 case .inactive: withAnimation {
                     blurRadius = 15

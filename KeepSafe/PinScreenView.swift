@@ -105,11 +105,9 @@ struct PinScreenView: View {
             
             Button("Submit") {
                 if pinViewModel.checkPIN() {
-                    DispatchQueue.main.asyncAfter(deadline: .now()) {
                         withAnimation(.spring()) {
                             appRootManager.currentRoot = .images
                         }
-                    }
                 }
             }
             .padding()

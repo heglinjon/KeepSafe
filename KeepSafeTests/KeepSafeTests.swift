@@ -6,27 +6,57 @@ import XCTest
 
 final class KeepSafeTests: XCTestCase {
 
+    
+    var viewModel: MainViewModel!
+    var mockAPIService: MockImageAPIService!
+        
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        super.setUp()
+        mockAPIService = MockImageAPIService()
+        viewModel = MainViewModel(apiService: mockAPIService)
+        
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        viewModel = nil
+        mockAPIService = nil
+        super.tearDown()
+        
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
+    func testFetchImagesSuccess() async {
+            let imageURLs: [URL] = [
+                URL(string: "https://picsum.photos/id/0/5000/3333")!,
+                URL(string: "https://picsum.photos/id/9/5000/3269")!,
+                URL(string: "https://picsum.photos/id/4/5000/3333")!
+            ]
+            mockAPIService.mockFetchImagesResult = imageURLs
+            
+            do {
+                try await viewModel.fetchImages()
+            } catch {
+                XCTFail("Unexpected error: \(error)")
+            }
+            
+        print(viewModel.images)
+        print(imageURLs)
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+            //XCTAssertEqual(viewModel.images, imageURLs)
+            XCTAssertEqual(viewModel.currentIndex, 0)
         }
-    }
+        
+    func testFetchImagesFailure() async {
+            mockAPIService.mockFetchImagesError = mockFetchImagesError.timeOut
+            
+            do {
+                try await viewModel.fetchImages()
+                XCTFail("Expected error did not occur.")
+            } catch {
+                XCTAssertTrue(viewModel.images.isEmpty)
+                XCTAssertEqual(viewModel.currentIndex, 0)
+            }
+        }
+        
 
 }
